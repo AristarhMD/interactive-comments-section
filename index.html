@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Comment Section</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: "Rubik", sans-serif;
+        --color-white: #fff;
+        --color-black: #000;
+        --color-grey-800: #334253;
+        --color-grey-500: #67727e;
+        --color-grey-100: #e9ebf0;
+        --color-grey-50: #f5f6fa;
+        --color-purple-600: #5357b6;
+        --color-purple-200: #c5c6ef;
+        --color-pink-400: #ed6368;
+        --color-pink-200: #ffb8bb;
+      }
+
+      @utility preset-1 {
+        @apply font-medium text-2xl leading-[120%];
+      }
+
+      @utility preset-2-m {
+        @apply font-medium text-base leading-[150%];
+      }
+
+      @utility preset-2-r {
+        @apply font-normal text-base leading-[150%];
+      }
+
+      @utility preset-3 {
+        @apply font-medium text-[0.8125rem] leading-[120%];
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-grey-50">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
