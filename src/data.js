@@ -1,4 +1,4 @@
-export const data = [
+ const data = [
   {
     avatar: "./avatars/image-amyrobson.png",
     user: "amyrobson",
@@ -27,10 +27,11 @@ export const data = [
         user: "juliusomo",
         posted: "2 days ago",
         replayto: "@ramsesmiron",
-        text: "@ramsesmiron I couldn’t agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
+        text: "I couldn’t agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
         likes: 2,
       },
     ],
   },
-  {},
 ];
+
+export default data
