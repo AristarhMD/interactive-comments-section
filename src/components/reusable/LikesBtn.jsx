@@ -18,7 +18,7 @@ export default function LikesBtn({ children }) {
   );
 
   return (
-    <div className="max-w-25 bg-grey-50 p-2 rounded-[10px] flex gap-4 justify-center items-center">
+    <div className="col-start-1 row-start-3 mr-auto md:w-10 md:row-start-1 md:row-span-2 max-w-25 bg-grey-50 p-2 md:py-4 md:px-1 rounded-[10px] self-start flex md:flex-col gap-4 justify-center items-center">
       <button className="cursor-pointer">{plusIcon}</button>
       <span className="text-purple-600 preset-2-m">{children}</span>
       <button className="cursor-pointer">{minusIcon}</button>

@@ -1,7 +1,8 @@
 import LikesBtn from "./LikesBtn.jsx";
+import ReplyPost from "./ReplyPost.jsx"
 
 export default function Post({ avatar, user, posted, text, likes, replay }) {
-  const replyIcon = (
+ const replyIcon = (
     <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
       <path
         className="fill-[#5357B6] group-active:fill-[#c5c6ef] group-hover:fill-[#c5c6ef]"
@@ -19,19 +20,11 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
     </svg>
   );
 
-  const editIcon = (
-    <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
-      <path
-        className="fill-[#5357B6] group-active:fill-[#c5c6ef] group-hover:fill-[#c5c6ef]"
-        d="M13.479 2.872 11.08.474a1.75 1.75 0 0 0-2.327-.06L.879 8.287a1.75 1.75 0 0 0-.5 1.06l-.375 3.648a.875.875 0 0 0 .875.954h.078l3.65-.333c.399-.04.773-.216 1.058-.499l7.875-7.875a1.68 1.68 0 0 0-.061-2.371Zm-2.975 2.923L8.159 3.449 9.865 1.7l2.389 2.39-1.75 1.706Z"
-      />
-    </svg>
-  );
 
-  return (
+   return (
     <section className="flex flex-col gap-4">
-      <article className="bg-white p-4 rounded-lg grid grid-cols-1 grid-rows-[repeat(3,min-content)] gap-y-4">
-        <div className="flex items-center gap-4">
+      <article className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-1 md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(3,min-content)] md:grid-rows-[repeat(2,min-content)] gap-y-4 md:gap-x-6">
+        <div className="flex items-center gap-4 md:col-start-2 md:row-start-1">
           <img
             className="size-8"
             src={avatar}
@@ -41,63 +34,19 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
           <p className="preset-2-r text-grey-500">{posted}</p>
         </div>
 
-        <p className="preset-2-r text-grey-500">{text}</p>
+        <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
+          {text}
+        </p>
 
-        <div className="flex items-center justify-between">
-          <LikesBtn>{likes}</LikesBtn>
-          <button className="group cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200">
-            {replyIcon} <span>Reply</span>
-          </button>
-        </div>
+        <LikesBtn>{likes}</LikesBtn>
+        <button className="col-start-1 md:col-start-3 row-start-3 md:row-start-1 ml-auto group cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200">
+          {replyIcon} <span>Reply</span>
+        </button>
       </article>
 
       {replay && (
-        <div className="pl-4 flex flex-col gap-4 border-l-2 border-grey-100">
-          {replay.map((replies, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-4 rounded-lg grid grid-cols-1 grid-rows-[repeat(3,min-content)] gap-y-4"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  className="size-8"
-                  src={replies.avatar}
-                  alt={`Avatar of the user ${user}`}
-                />
-                <p className="preset-2-m text-grey-800">{replies.user}</p>
-                <p className="preset-2-r text-grey-500">{replies.posted}</p>
-              </div>
-
-              <p className="preset-2-r text-grey-500">
-                {replies.replayto && (
-                  <span className="text-purple-600 font-bold">
-                    {replies.replayto}
-                  </span>
-                )}{" "}
-                {replies.text}
-              </p>
-
-              <div className="flex items-center justify-between">
-                <LikesBtn>{replies.likes}</LikesBtn>
-                {replies.user === "juliusomo" ? (
-                  <div className="preset-2-m flex items-center gap-4">
-                    <button className="group cursor-pointer flex items-center gap-2 text-pink-400 hover:text-pink-200">
-                      {deleteIcon}
-                      <span>Delete</span>
-                    </button>
-                    <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200">
-                      {editIcon}
-                      <span>Edit</span>
-                    </button>
-                  </div>
-                ) : (
-                  <button className="group cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200">
-                    {replyIcon} <span>Reply</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="pl-4 md:pl-10 md:ml-10.5 flex flex-col gap-4 border-l-2 border-grey-100">
+          {replay.map((replies, idx) => <ReplyPost key={idx} {...replies} /> )}
         </div>
       )}
     </section>
