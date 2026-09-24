@@ -1,7 +1,35 @@
 import LikesBtn from "./LikesBtn.jsx";
+import {useState} from "react"
+
 
 
 export default function ReplyPost({avatar, user, posted, replayto, text, likes}) {
+  const [isReplyed, setIsReplyed] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [initialVal, setInitialVal] = useState(`@${user},`)
+  const [initEditedVal, setInitEditedVal] = useState(`${replayto} ${text}`)
+
+  const handleReplyClick = () => setIsReplyed(!isReplyed);
+  const handeChange = (e) => setInitialVal(e.target.value)
+  const handleEditing = () => setIsEditing(!isEditing)
+  const handleEditedValue = () => setInitEditedVal(e.target.value)
+
+  const authorText = () =>{
+    if(!isEditing) {
+      return (
+        <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
+          <span className="text-purple-600 font-bold">{replayto} </span>{text}
+        </p>
+      )
+    } else if(isEditing){
+      return (
+        <textarea className="py-2 px-4 border border-inside border-grey-100 rounded-lg h-35 resize-none preset-2-r text-grey-800 md:col-start-2 md:col-span-2 md:row-start-2"
+      defaultValue={initEditedVal}
+      onChange={handleEditedValue}
+      />)
+    }
+  }
+
   const replyIcon = (
     <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -30,6 +58,7 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
   );
 
   return (
+    <div className="flex flex-col gap-4">
     <div
       className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-1 md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(3,min-content)] md:grid-rows-[repeat(2,min-content)] gap-y-4 md:gap-x-6"
     >
@@ -46,9 +75,14 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
         <p className="preset-2-r text-grey-500">{posted}</p>
       </div>
 
-      <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
+
+      {user === "juliusomo" ?
+        authorText()
+       :
+        <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
           <span className="text-purple-600 font-bold">{replayto} </span>{text}
-      </p>
+        </p>
+      }
 
         <LikesBtn>{likes}</LikesBtn>
         {user === "juliusomo" ? (
@@ -57,16 +91,44 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
               {deleteIcon}
               <span>Delete</span>
             </button>
-            <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200">
+            <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+            onClick={handleEditing}>
               {editIcon}
               <span>Edit</span>
             </button>
           </div>
         ) : (
-          <button className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1">
+          <button className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
+          onClick={handleReplyClick}>
             {replyIcon} <span>Reply</span>
           </button>
         )}
     </div>
+
+ {isReplyed && (
+        <div className="pl-4 md:pl-10 md:ml-10.5 border-l-2 border-grey-100">
+          <div className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-[repeat(2, min-content)]  md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(2,min-content)] md:grid-rows-1 gap-y-4 md:gap-y-0 md:gap-x-4 md:items-start">
+            <textarea
+              className="col-start-1 col-span-2 py-2 px-4 border border-inside border-grey-100 rounded-lg h-24 resize-none preset-2-r text-grey-800 placeholder:text-grey-500 md:col-start-2 md:col-span-1 md:row-start-1 "
+              placeholder="Add a comment…"
+              defaultValue={initialVal}
+              onChange={handeChange}
+            />
+
+            <img
+              className="size-8 col-start-1 self-center md:self-start md:col-start-1 md:row-start-1"
+              src="./avatars/image-juliusomo.png"
+            />
+
+            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1">
+              REPLY
+            </button>
+          </div>
+        </div>
+      )}
+
+    </div>
+
+    
   );
 }
