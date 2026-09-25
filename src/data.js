@@ -1,5 +1,6 @@
  const data = [
   {
+    id:1,
     avatar: "./avatars/image-amyrobson.png",
     user: "amyrobson",
     posted: "1 month ago",
@@ -8,6 +9,7 @@
   },
 
   {
+    id:2,
     avatar: "./avatars/image-maxblagun.png",
     user: "maxblagun",
     posted: "2 weeks ago",
@@ -15,6 +17,7 @@
     likes: 5,
     replay: [
       {
+        id:21,
         avatar: "./avatars/image-ramsesmiron.png",
         user: "ramsesmiron",
         posted: "1 week ago",
@@ -23,6 +26,7 @@
         likes: 4,
       },
       {
+        id:22,
         avatar: "./avatars/image-juliusomo.png",
         user: "juliusomo",
         posted: "2 days ago",

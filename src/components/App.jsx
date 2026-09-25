@@ -5,8 +5,8 @@ function App() {
   return (
     <main className="mx-auto md:max-w-182.5 md:min-w-171">
       <section className="mx-auto w-[91.46%] md:w-full py-8 flex flex-col gap-4">
-        {data.map((post, idx) => (
-          <Post key={idx} {...post} />
+        {data.map((post) => (
+          <Post key={post.id} {...post} />
         ))}
       </section>
 

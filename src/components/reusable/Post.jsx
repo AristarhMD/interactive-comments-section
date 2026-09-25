@@ -56,8 +56,8 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
 
       {replay && (
         <div className="pl-4 md:pl-10 md:ml-10.5 flex flex-col gap-4 border-l-2 border-grey-100">
-          {replay.map((replies, idx) => (
-            <ReplyPost key={idx} {...replies} />
+          {replay.map((replies) => (
+            <ReplyPost key={replies.id} {...replies} />
           ))}
         </div>
       )}

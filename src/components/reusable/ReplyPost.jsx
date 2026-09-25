@@ -7,24 +7,37 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
   const [isReplyed, setIsReplyed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [initialVal, setInitialVal] = useState(`@${user},`)
-  const [initEditedVal, setInitEditedVal] = useState(`${replayto} ${text}`)
+  const [commentText, setCommentText] = useState(text)
+  const [draft, setDraft] = useState(text)
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
   const handeChange = (e) => setInitialVal(e.target.value)
-  const handleEditing = () => setIsEditing(!isEditing)
-  const handleEditedValue = () => setInitEditedVal(e.target.value)
+  const handleEditing = () =>{
+    if(!isEditing) setDraft(commentText)
+    setIsEditing(!isEditing)
+  }
+  
+   const handleEditedValue = (e) => setDraft(e.target.value)
+
+  const handeUpdates = (e) =>{
+    setCommentText(draft)
+    setIsEditing(false)
+  }
+
+
+
 
   const authorText = () =>{
     if(!isEditing) {
       return (
         <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
-          <span className="text-purple-600 font-bold">{replayto} </span>{text}
+          <span className="text-purple-600 font-bold">{replayto} </span>{commentText}
         </p>
       )
     } else if(isEditing){
       return (
         <textarea className="py-2 px-4 border border-inside border-grey-100 rounded-lg h-35 resize-none preset-2-r text-grey-800 md:col-start-2 md:col-span-2 md:row-start-2"
-      defaultValue={initEditedVal}
+      defaultValue={draft}
       onChange={handleEditedValue}
       />)
     }
@@ -91,11 +104,20 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
               {deleteIcon}
               <span>Delete</span>
             </button>
+
+            {isEditing ? 
+            <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+            onClick={handeUpdates}>
+              {editIcon}
+              <span>Save</span>
+            </button>
+            :
             <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
             onClick={handleEditing}>
               {editIcon}
               <span>Edit</span>
             </button>
+            }
           </div>
         ) : (
           <button className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
