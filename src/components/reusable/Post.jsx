@@ -6,9 +6,32 @@ import ReplyPost from "./ReplyPost.jsx";
 export default function Post({ avatar, user, posted, text, likes, replay }) {
   const [isReplyed, setIsReplyed] = useState(false);
   const [initialVal, setInitialVal] = useState(`@${user},`)
+  const [replies, setReplies] = useState(replay || [])
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
-  const handeChange = (e) => setInitialVal(e.target.value)
+  const handeChange = (e) => setInitialVal(e.target.value);
+
+  const addReply = (message, replyingToUser) => {
+    const cleanMessage = message.replace(/^@\S+,?\s*/, "").trim();
+    if(!cleanMessage) return
+
+    const newReply = {
+      id:crypto.randomUUID ? crypto.randomUUID() : Date.now(),
+      avatar:"./avatars/image-juliusomo.png",
+      user:"juliusomo",
+      posted:"Just now",
+      text:cleanMessage,
+      likes:0,
+    }
+
+    setReplies((prev)=>[...prev, newReply])
+  }
+
+  const handleSubmitReply = () =>{
+    addReply(initialVal, user),
+    setInitialVal(`@${user}`),
+    setIsReplyed(false)
+  }
 
   const replyIcon = (
     <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
@@ -54,10 +77,10 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
         </button>
       </article>
 
-      {replay && (
+      {replies.length > 0 && (
         <div className="pl-4 md:pl-10 md:ml-10.5 flex flex-col gap-4 border-l-2 border-grey-100">
-          {replay.map((replies) => (
-            <ReplyPost key={replies.id} {...replies} />
+          {replies.map((reply) => (
+            <ReplyPost key={reply.id} {...reply} onReply={addReply} />
           ))}
         </div>
       )}
@@ -77,7 +100,7 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
               src="./avatars/image-juliusomo.png"
             />
 
-            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1">
+            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1" onClick={handleSubmitReply}>
               REPLY
             </button>
           </div>

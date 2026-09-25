@@ -1,47 +1,59 @@
 import LikesBtn from "./LikesBtn.jsx";
-import {useState} from "react"
+import { useState } from "react";
 
-
-
-export default function ReplyPost({avatar, user, posted, replayto, text, likes}) {
+export default function ReplyPost({
+  avatar,
+  user,
+  posted,
+  replayto,
+  text,
+  likes,
+  onReply
+}) {
   const [isReplyed, setIsReplyed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [initialVal, setInitialVal] = useState(`@${user},`)
-  const [commentText, setCommentText] = useState(text)
-  const [draft, setDraft] = useState(text)
+  const [initialVal, setInitialVal] = useState(`@${user}`);
+  const [commentText, setCommentText] = useState(text);
+  const [draft, setDraft] = useState(text);
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
-  const handeChange = (e) => setInitialVal(e.target.value)
-  const handleEditing = () =>{
-    if(!isEditing) setDraft(commentText)
-    setIsEditing(!isEditing)
+  const handeChange = (e) => setInitialVal(e.target.value);
+  const handleEditing = () => {
+    if (!isEditing) setDraft(commentText);
+    setIsEditing(!isEditing);
+  };
+
+  const handleEditedValue = (e) => setDraft(e.target.value);
+
+  const handeUpdates = (e) => {
+    setCommentText(draft);
+    setIsEditing(false);
+  };
+
+    const handleSubmitReply = () =>{
+    addReply(initialVal, user),
+    setInitialVal(`@${user}`),
+    setIsReplyed(false)
   }
-  
-   const handleEditedValue = (e) => setDraft(e.target.value)
 
-  const handeUpdates = (e) =>{
-    setCommentText(draft)
-    setIsEditing(false)
-  }
-
-
-
-
-  const authorText = () =>{
-    if(!isEditing) {
+  const authorText = () => {
+    if (!isEditing) {
       return (
         <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
-          <span className="text-purple-600 font-bold">{replayto} </span>{commentText}
+          <span className="text-purple-600 font-bold">{replayto} </span>
+          {commentText}
         </p>
-      )
-    } else if(isEditing){
+      );
+    } else if (isEditing) {
       return (
-        <textarea className="py-2 px-4 border border-inside border-grey-100 rounded-lg h-35 resize-none preset-2-r text-grey-800 md:col-start-2 md:col-span-2 md:row-start-2"
-      defaultValue={draft}
-      onChange={handleEditedValue}
-      />)
+        <textarea
+          className="py-2 px-4 border border-inside border-grey-100 rounded-lg h-35 resize-none preset-2-r text-grey-800 md:col-start-2 md:col-span-2 md:row-start-2"
+          defaultValue={draft}
+          onChange={handleEditedValue}
+        />
+      );
     }
-  }
+  };
 
   const replyIcon = (
     <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
@@ -72,30 +84,34 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
 
   return (
     <div className="flex flex-col gap-4">
-    <div
-      className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-1 md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(3,min-content)] md:grid-rows-[repeat(2,min-content)] gap-y-4 md:gap-x-6"
-    >
-      <div className="flex items-center gap-4 md:col-start-2 md:row-start-1">
-        <img
-          className="size-8"
-          src={avatar}
-          alt={`Avatar of the user ${user}`}
-        />
-        <div className="flex items-center gap-2">
-          <p className="preset-2-m text-grey-800">{user}</p>
-          {user === "juliusomo" ? <span className="preset-3 text-white py-px px-1.5 bg-purple-600 rounded-xs">you</span> : ""}
+      <div className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-1 md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(3,min-content)] md:grid-rows-[repeat(2,min-content)] gap-y-4 md:gap-x-6">
+        <div className="flex items-center gap-4 md:col-start-2 md:row-start-1">
+          <img
+            className="size-8"
+            src={avatar}
+            alt={`Avatar of the user ${user}`}
+          />
+          <div className="flex items-center gap-2">
+            <p className="preset-2-m text-grey-800">{user}</p>
+            {user === "juliusomo" ? (
+              <span className="preset-3 text-white py-px px-1.5 bg-purple-600 rounded-xs">
+                you
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
+          <p className="preset-2-r text-grey-500">{posted}</p>
         </div>
-        <p className="preset-2-r text-grey-500">{posted}</p>
-      </div>
 
-
-      {user === "juliusomo" ?
-        authorText()
-       :
-        <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
-          <span className="text-purple-600 font-bold">{replayto} </span>{text}
-        </p>
-      }
+        {user === "juliusomo" ? (
+          authorText()
+        ) : (
+          <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
+            <span className="text-purple-600 font-bold">{replayto} </span>
+            {text}
+          </p>
+        )}
 
         <LikesBtn>{likes}</LikesBtn>
         {user === "juliusomo" ? (
@@ -105,29 +121,42 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
               <span>Delete</span>
             </button>
 
-            {isEditing ? 
-            <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
-            onClick={handeUpdates}>
-              {editIcon}
-              <span>Save</span>
-            </button>
-            :
-            <button className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
-            onClick={handleEditing}>
-              {editIcon}
-              <span>Edit</span>
-            </button>
-            }
+            {isEditing ? (
+              <button
+                className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+                onClick={handeUpdates}
+              >
+                {editIcon}
+                <span>Save</span>
+              </button>
+            ) : (
+              <button
+                className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+                onClick={handleEditing}
+              >
+                {editIcon}
+                <span>Edit</span>
+              </button>
+            )}
           </div>
+        ) : isReplyed ? (
+          <button
+            className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-pink-400 hover:text-pink-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
+            onClick={handleReplyClick}
+          >
+            {deleteIcon} <span>Cancel</span>
+          </button>
         ) : (
-          <button className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
-          onClick={handleReplyClick}>
+          <button
+            className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
+            onClick={handleReplyClick}
+          >
             {replyIcon} <span>Reply</span>
           </button>
         )}
-    </div>
+      </div>
 
- {isReplyed && (
+      {isReplyed && (
         <div className="pl-4 md:pl-10 md:ml-10.5 border-l-2 border-grey-100">
           <div className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-[repeat(2, min-content)]  md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(2,min-content)] md:grid-rows-1 gap-y-4 md:gap-y-0 md:gap-x-4 md:items-start">
             <textarea
@@ -142,15 +171,12 @@ export default function ReplyPost({avatar, user, posted, replayto, text, likes})
               src="./avatars/image-juliusomo.png"
             />
 
-            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1">
+            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1" onClick={handleSubmitReply}>
               REPLY
             </button>
           </div>
         </div>
       )}
-
     </div>
-
-    
   );
 }
