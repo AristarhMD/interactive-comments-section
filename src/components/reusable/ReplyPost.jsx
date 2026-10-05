@@ -2,6 +2,7 @@ import LikesBtn from "./LikesBtn.jsx";
 import { useState } from "react";
 
 export default function ReplyPost({
+  id,
   avatar,
   user,
   posted,
@@ -9,12 +10,14 @@ export default function ReplyPost({
   text,
   likes,
   onReply,
+  onDelete,
 }) {
   const [isReplyed, setIsReplyed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [initialVal, setInitialVal] = useState(`@${user}, `);
   const [commentText, setCommentText] = useState(text);
   const [draft, setDraft] = useState(text);
+  const [replies, setReplies] = useState([]);
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
   const handeChange = (e) => setInitialVal(e.target.value);
@@ -30,19 +33,49 @@ export default function ReplyPost({
     setIsEditing(false);
   };
 
-  const authorText = () => {
+  const handleSubmitReply = () => {
+    (addReply(initialVal, user),
+      setInitialVal(`@${user}, `),
+      setIsReplyed(false));
+  };
+
+  const addReply = (message, replyingToUser) => {
+    const cleanMessage = message.replace(/^@\S+,?\s*/, "").trim();
+    if (!cleanMessage) return;
+
+    const newReply = {
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now(),
+      avatar: "./avatars/image-juliusomo.png",
+      user: "juliusomo",
+      posted: "Just now",
+      replayto: replyingToUser,
+      text: cleanMessage,
+      likes: 0,
+    };
+
+    console.log(newReply.id);
+    setReplies((prev) => [...prev, newReply]);
+  };
+
+  const nestedOnDelete = (id) => {
+    console.log(id);
+    console.log(replies);
+    setReplies((prev) => prev.filter((replie) => replie.id !== id));
+  };
+
+  const authorText = (text = commentText) => {
     if (!isEditing) {
       return (
         <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
           <span className="text-purple-600 font-bold">{replayto} </span>
-          {commentText}
+          {text}
         </p>
       );
     } else if (isEditing) {
       return (
         <textarea
           className="py-2 px-4 border border-inside border-grey-100 rounded-lg h-35 resize-none preset-2-r text-grey-800 md:col-start-2 md:col-span-2 md:row-start-2"
-          defaultValue={draft}
+          defaultValue={text ? text : draft}
           onChange={handleEditedValue}
         />
       );
@@ -110,7 +143,10 @@ export default function ReplyPost({
         <LikesBtn>{likes}</LikesBtn>
         {user === "juliusomo" ? (
           <div className="preset-2-m flex items-center gap-4 col-start-1 row-start-3 md:col-start-3 md:row-start-1 ml-auto">
-            <button className="group cursor-pointer flex items-center gap-2 text-pink-400 hover:text-pink-200">
+            <button
+              className="group cursor-pointer flex items-center gap-2 text-pink-400 hover:text-pink-200"
+              onClick={() => onDelete(id)}
+            >
               {deleteIcon}
               <span>Delete</span>
             </button>
@@ -149,6 +185,92 @@ export default function ReplyPost({
           </button>
         )}
       </div>
+
+      {replies.length > 0 && (
+        <div className="pl-4 md:pl-10 md:ml-10.5 flex flex-col gap-4 border-l-2 border-grey-100">
+          {replies.map((reply) => (
+            <div
+              key={reply.id}
+              className="bg-white p-4 md:p-6 rounded-lg grid grid-cols-1 md:grid-cols-[max-content_1fr_min-content] grid-rows-[repeat(3,min-content)] md:grid-rows-[repeat(2,min-content)] gap-y-4 md:gap-x-6"
+            >
+              <div className="flex items-center gap-4 md:col-start-2 md:row-start-1">
+                <img
+                  className="size-8"
+                  src={reply.avatar}
+                  alt={`Avatar of the user ${reply.user}`}
+                />
+                <div className="flex items-center gap-2">
+                  <p className="preset-2-m text-grey-800">{reply.user}</p>
+                  {reply.user === "juliusomo" ? (
+                    <span className="preset-3 text-white py-px px-1.5 bg-purple-600 rounded-xs">
+                      you
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <p className="preset-2-r text-grey-500">{reply.posted}</p>
+              </div>
+
+              {reply.user === "juliusomo" ? (
+                authorText(reply.text)
+              ) : (
+                <p className="preset-2-r text-grey-500 md:col-start-2 md:col-span-2 md:row-start-2">
+                  <span className="text-purple-600 font-bold">
+                    {reply.replayto}{" "}
+                  </span>
+                  {reply.text}
+                </p>
+              )}
+
+              <LikesBtn>{reply.likes}</LikesBtn>
+              {reply.user === "juliusomo" ? (
+                <div className="preset-2-m flex items-center gap-4 col-start-1 row-start-3 md:col-start-3 md:row-start-1 ml-auto">
+                  <button
+                    className="group cursor-pointer flex items-center gap-2 text-pink-400 hover:text-pink-200"
+                    onClick={() => nestedOnDelete(reply.id)}
+                  >
+                    {deleteIcon}
+                    <span>Delete</span>
+                  </button>
+
+                  {isEditing ? (
+                    <button
+                      className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+                      onClick={handeUpdates}
+                    >
+                      {editIcon}
+                      <span>Save</span>
+                    </button>
+                  ) : (
+                    <button
+                      className="group cursor-pointer flex items-center gap-2 text-purple-600 hover:text-purple-200"
+                      onClick={handleEditing}
+                    >
+                      {editIcon}
+                      <span>Edit</span>
+                    </button>
+                  )}
+                </div>
+              ) : isReplyed ? (
+                <button
+                  className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-pink-400 hover:text-pink-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
+                  onClick={handleReplyClick}
+                >
+                  {deleteIcon} <span>Cancel</span>
+                </button>
+              ) : (
+                <button
+                  className="group ml-auto cursor-pointer flex items-center gap-2 preset-2-m text-purple-600 hover:text-purple-200 col-start-1 md:col-start-3 row-start-3 md:row-start-1"
+                  onClick={handleReplyClick}
+                >
+                  {replyIcon} <span>Reply</span>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {isReplyed && (
         <div className="pl-4 md:pl-10 md:ml-10.5 border-l-2 border-grey-100">
