@@ -5,38 +5,39 @@ import ReplyPost from "./ReplyPost.jsx";
 
 export default function Post({ avatar, user, posted, text, likes, replay }) {
   const [isReplyed, setIsReplyed] = useState(false);
-  const [initialVal, setInitialVal] = useState(`@${user},`)
-  const [replies, setReplies] = useState(replay || [])
+  const [initialVal, setInitialVal] = useState(`@${user}, `);
+  const [replies, setReplies] = useState(replay || []);
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
   const handeChange = (e) => setInitialVal(e.target.value);
 
   const addReply = (message, replyingToUser) => {
     const cleanMessage = message.replace(/^@\S+,?\s*/, "").trim();
-    if(!cleanMessage) return
+    if (!cleanMessage) return;
 
     const newReply = {
-      id:crypto.randomUUID ? crypto.randomUUID() : Date.now(),
-      avatar:"./avatars/image-juliusomo.png",
-      user:"juliusomo",
-      posted:"Just now",
-      text:cleanMessage,
-      likes:0,
-    }
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now(),
+      avatar: "./avatars/image-juliusomo.png",
+      user: "juliusomo",
+      posted: "Just now",
+      replayto: replyingToUser,
+      text: cleanMessage,
+      likes: 0,
+    };
 
-    setReplies((prev)=>[...prev, newReply])
-  }
+    setReplies((prev) => [...prev, newReply]);
+  };
 
-  const handleSubmitReply = () =>{
-    addReply(initialVal, user),
-    setInitialVal(`@${user}`),
-    setIsReplyed(false)
-  }
+  const handleSubmitReply = () => {
+    (addReply(initialVal, user),
+      setInitialVal(`@${user}, `),
+      setIsReplyed(false));
+  };
 
   const replyIcon = (
     <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
       <path
-        className="fill-[#5357B6] group-active:fill-[#c5c6ef] group-hover:fill-[#c5c6ef]"
+        className="fill-purple-600 group-active:fill-purple-200 group-hover:fill-purple-200"
         d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z"
       />
     </svg>
@@ -45,7 +46,7 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
   const deleteIcon = (
     <svg width="12" height="14" xmlns="http://www.w3.org/2000/svg">
       <path
-        className="fill-[#ED6368] group-active:fill-[#ffb8bb] group-hover:fill-[#ffb8bb]"
+        className="fill-pink-400 group-active:fill-pink-200 group-hover:fill-pink-200"
         d="M1.167 12.448c0 .854.7 1.552 1.555 1.552h6.222c.856 0 1.556-.698 1.556-1.552V3.5H1.167v8.948Zm10.5-11.281H8.75L7.773 0h-3.88l-.976 1.167H0v1.166h11.667V1.167Z"
       />
     </svg>
@@ -100,7 +101,10 @@ export default function Post({ avatar, user, posted, text, likes, replay }) {
               src="./avatars/image-juliusomo.png"
             />
 
-            <button className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1" onClick={handleSubmitReply}>
+            <button
+              className="py-3 px-8 col-start-2 preset-2-m justify-self-end bg-purple-600 hover:bg-purple-200 text-white rounded-lg cursor-pointer md:col-start-3 md:row-start-1"
+              onClick={handleSubmitReply}
+            >
               REPLY
             </button>
           </div>

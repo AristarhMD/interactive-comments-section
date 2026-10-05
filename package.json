@@ -1,5 +1,5 @@
 {
-  "name": "react-vite-template",
+  "name": "interactive-comments-section",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -8,11 +8,13 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tailwindcss/vite": "^4.3.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "vite": "^4.0.0",
-    "@vitejs/plugin-react": "^4.3.4"
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.1"
   }
 }
