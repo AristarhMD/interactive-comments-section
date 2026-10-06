@@ -34,7 +34,7 @@ export default function Post({
       posted: "Just now",
       replayto: replyingToUser,
       text: cleanMessage,
-      likes: 0,
+      likes: [],
     };
 
     setReplies((prev) => [...prev, newReply]);

@@ -14,7 +14,7 @@ export default function AddComment({ addComment }) {
       user: "juliusomo",
       posted: "Just now",
       text: commentContent,
-      likes: 0,
+      likes: [],
     };
 
     addComment(newReply);
