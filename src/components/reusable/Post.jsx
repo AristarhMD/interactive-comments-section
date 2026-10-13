@@ -1,10 +1,10 @@
 import { useState } from "react";
-import data from "../../data.js";
 
 import ReplyPost from "./ReplyPost.jsx";
 import AuthorReply from "./AuthorReply.jsx";
 import UsersReply from "./UsersReply.jsx";
 import TextAreaReply from "./TextAreaReply.jsx";
+import DeleteConfirmation from "./DeleteConfirmation.jsx";
 
 export default function Post({
   id,
@@ -19,6 +19,8 @@ export default function Post({
   const [isReplyed, setIsReplyed] = useState(false);
   const [initialVal, setInitialVal] = useState(`@${user}, `);
   const [replies, setReplies] = useState(replay || []);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [idForDeletion, setIdForDeletion] = useState(null);
 
   const handleReplyClick = () => setIsReplyed(!isReplyed);
   const handleChange = (e) => setInitialVal(e.target.value);
@@ -47,8 +49,8 @@ export default function Post({
   };
 
   const handleDeletReply = (id) => {
-    console.log(data);
-    setReplies((prev) => prev.filter((replie) => replie.id !== id));
+    setIdForDeletion(id);
+    setConfirmDelete(true);
   };
 
   return (
@@ -94,6 +96,15 @@ export default function Post({
           initialVal={initialVal}
           handleChange={handleChange}
           handleSubmitReply={handleSubmitReply}
+        />
+      )}
+
+      {confirmDelete && (
+        <DeleteConfirmation
+          idForDeletion={idForDeletion}
+          settingDeletId={setIdForDeletion}
+          settingDeletConfirmation={setConfirmDelete}
+          updateComments={setReplies}
         />
       )}
     </div>

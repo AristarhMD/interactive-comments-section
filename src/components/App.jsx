@@ -1,12 +1,18 @@
 import data from "../data.js";
 import Post from "./reusable/Post.jsx";
 import AddComment from "./AddComment.jsx";
+import DeleteConfirmation from "./reusable/DeleteConfirmation.jsx";
+
 import { useState } from "react";
 
 function App() {
   const [comments, setComments] = useState(data);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [idForDeletion, setIdForDeletion] = useState(null);
+
   const handleDeletePost = (id) => {
-    setComments((prev) => prev.filter((prev) => prev.id !== id));
+    setIdForDeletion(id);
+    setConfirmDelete(true);
   };
 
   const handleAddComment = (newComment) => {
@@ -24,6 +30,14 @@ function App() {
       <section className="mx-auto w-[91.46%] md:w-full">
         <AddComment addComment={handleAddComment} />
       </section>
+      {confirmDelete && (
+        <DeleteConfirmation
+          idForDeletion={idForDeletion}
+          settingDeletId={setIdForDeletion}
+          settingDeletConfirmation={setConfirmDelete}
+          updateComments={setComments}
+        />
+      )}
     </main>
   );
 }

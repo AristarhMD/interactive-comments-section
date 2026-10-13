@@ -5,7 +5,6 @@ export default function LikesBtn({ children }) {
   const [usersLiked, setUsersLiked] = useState(children);
   const [numberOfLikes, setNumberOfLikes] = useState(children.length);
   const [isLiked, setIsLiked] = useState(0);
-  // console.log(children);
 
   const handlePlusLike = () => {
     if (usersLiked.includes("juliusomo")) {

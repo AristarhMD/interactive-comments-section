@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { replyIcon, deleteIcon, editIcon } from "../Icons.jsx";
+import { deleteIcon, editIcon } from "../Icons.jsx";
 import LikesBtn from "./LikesBtn.jsx";
 
 export default function AuthorReply({

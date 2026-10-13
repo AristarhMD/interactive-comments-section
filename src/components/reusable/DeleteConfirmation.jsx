@@ -1,4 +1,21 @@
-export default function DeleteConfirmation() {
+export default function DeleteConfirmation({
+  idForDeletion,
+  settingDeletId,
+  settingDeletConfirmation,
+  updateComments,
+}) {
+  console.log(idForDeletion);
+
+  const handleCancel = () => {
+    settingDeletId(null);
+    settingDeletConfirmation(false);
+  };
+
+  const handleDelete = () => {
+    updateComments((prev) => prev.filter((prev) => prev.id !== idForDeletion));
+    settingDeletId(null);
+    settingDeletConfirmation(false);
+  };
   return (
     <div className="fixed bg-black/50 inset-0 flex items-center justify-center">
       <div className=" w-[91.46%] max-w-100 h-56 md:h-63 flex flex-col items-start justify-center gap-4 md:gap-6 bg-white rounded-lg text-left py-5.5 md:py-7 px-6.25 md:px-7">
@@ -8,10 +25,16 @@ export default function DeleteConfirmation() {
           comment and can’t be undone.
         </p>
         <div className="flex justify-between gap-4 mx-auto">
-          <button className="cursor-pointer bg-grey-500 rounded-lg preset-2-m text-white px-5.5 py-3 hover:opacity-50">
+          <button
+            className="cursor-pointer bg-grey-500 rounded-lg preset-2-m text-white px-5.5 py-3 hover:opacity-50"
+            onClick={handleCancel}
+          >
             NO, CANCEL
           </button>
-          <button className="cursor-pointer bg-pink-400 rounded-lg preset-2-m text-white px-5.5 py-3 hover:opacity-50">
+          <button
+            className="cursor-pointer bg-pink-400 rounded-lg preset-2-m text-white px-5.5 py-3 hover:opacity-50"
+            onClick={handleDelete}
+          >
             YES, DELETE
           </button>
         </div>
